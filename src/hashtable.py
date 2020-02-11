@@ -51,7 +51,11 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        address = self._hash_mod(key)
+        
+        node = LinkedPair(key, value)
+        node.next = self.storage[address]
+        self.storage[address] = node
 
 
 
@@ -63,7 +67,11 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        address = self._hash_mod(key)
+        if not self.storage[address]:
+            print('Warning! There is no key that you are looking for!')
+
+        self.storage[address] = self.storage[address].next
 
 
     def retrieve(self, key):
@@ -74,7 +82,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        address = self._hash_mod(key)
+        if not self.storage[address]:
+            # print('1', self.storage[address].__dict__)
+            return None
+        node = self.storage[address]
+        # print('2', self.storage[address].__dict__)
+        while node is not None:
+            curr = node
+            node = curr.next
+            if curr.key == key:
+                return curr.value
 
 
     def resize(self):
@@ -84,8 +102,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity *= 2
+        old = self.storage
+        self.storage = [None] * self.capacity
 
+        for i in old:
+            if i is not None:
+                while i is not None:
+                    self.insert(i.key, i.value)
+                    i = i.next
 
 
 if __name__ == "__main__":
