@@ -70,8 +70,28 @@ class HashTable:
         address = self._hash_mod(key)
         if not self.storage[address]:
             print('Warning! There is no key that you are looking for!')
+        
+        # self.storage[address] = self.storage[address].next
 
-        self.storage[address] = self.storage[address].next
+        node = self.storage[address]
+
+        if node.key == key:
+            self.storage[address] = node.next
+        
+
+        arr = []
+        while node is not None:
+            if node.key != key:
+                arr.append(node)
+            node = node.next
+
+        for i in range(0, len(arr)-1):
+            if arr[i + 1] is not None:
+                arr[i].next = arr[i+1]
+
+        if len(arr) > 0:
+            self.storage[address] = arr[0]
+            
 
 
     def retrieve(self, key):
@@ -107,10 +127,9 @@ class HashTable:
         self.storage = [None] * self.capacity
 
         for i in old:
-            if i is not None:
-                while i is not None:
-                    self.insert(i.key, i.value)
-                    i = i.next
+            while i is not None:
+                self.insert(i.key, i.value)
+                i = i.next
 
 
 if __name__ == "__main__":
